@@ -101,6 +101,10 @@ public class UserBaseController<T extends GenericUser> {
         if (!ValueWidget.isNullOrEmpty(targetView)) {
             return targetView;
         }
+        return getLogoutReturnUrl();
+    }
+
+    public String getLogoutReturnUrl() {
         return "redirect:/";
     }
 
