@@ -46,6 +46,26 @@ public abstract class BaseController<T> extends GenericController<T> {
     }
 
     /***
+     * 删除记录
+     *
+     * @param request
+     * @return
+     */
+    protected AccessLog logDelete(HttpServletRequest request) {
+        return logByMethod(request, Constant2.LOGS_ACCESS_TYPE_DELETE);
+    }
+
+    /***
+     * 修改记录
+     *
+     * @param request
+     * @return
+     */
+    protected AccessLog logUpdate(HttpServletRequest request) {
+        return logByMethod(request, Constant2.LOGS_ACCESS_TYPE_UPDATE);
+    }
+
+    /***
      * 离开页面
      *
      * @param request
@@ -54,6 +74,25 @@ public abstract class BaseController<T> extends GenericController<T> {
         return logByMethod(request, Constant2.LOGS_ACCESS_TYPE_LEAVE);
     }
 
+    /***
+     * 用户登录
+     *
+     * @param request
+     * @return
+     */
+    protected AccessLog logLogin(HttpServletRequest request) {
+        return logByMethod(request, Constant2.LOGS_ACCESS_TYPE_LOGIN);
+    }
+
+    /***
+     * 用户注销/退出
+     *
+     * @param request
+     * @return
+     */
+    protected AccessLog logLogout(HttpServletRequest request) {
+        return logByMethod(request, Constant2.LOGS_ACCESS_TYPE_LOGOUT);
+    }
     protected AccessLog logByMethod(HttpServletRequest request, int accessType) {
         AccessLog accessLog = new AccessLog();
         if (WebServletUtil.isLocalIp(request)) {

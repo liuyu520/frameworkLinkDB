@@ -8,6 +8,7 @@ import com.string.widget.util.ValueWidget;
 import oa.bean.LoginResultBean;
 import oa.service.DictionaryParam;
 import oa.util.AuthenticateUtil;
+import oa.web.controller.base.BaseController;
 import org.apache.log4j.Logger;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,14 +20,18 @@ import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserBaseController<T extends GenericUser> {
+public class UserBaseController<T extends GenericUser> extends BaseController<T> {
     Logger logger = Logger.getLogger(this.getClass());
     private IUserLoginDao<T> userDao;
 
     public void logoutCommon(HttpSession session) {
         AuthenticateUtil.logout(session);
+        afterLogout(session);
     }
 
+    public void afterLogout(HttpSession session) {
+
+    }
     public LoginResultBean loginCommon(Model model, GenericUser user, HttpServletRequest request, HttpServletResponse response
             , HttpSession session, String issaveUserName, String issavePasswd) {
         LoginResultBean loginResultBean = new LoginResultBean();
@@ -136,5 +141,20 @@ public class UserBaseController<T extends GenericUser> {
     @Resource
     public void setUserDao(IUserLoginDao<T> userDao) {
         this.userDao = userDao;
+    }
+
+    @Override
+    protected void beforeAddInput(Model model) {
+
+    }
+
+    @Override
+    protected void errorDeal(Model model) {
+
+    }
+
+    @Override
+    public String getJspFolder() {
+        return null;
     }
 }
