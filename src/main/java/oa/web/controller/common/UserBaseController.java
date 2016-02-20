@@ -24,12 +24,21 @@ public class UserBaseController<T extends GenericUser> extends BaseController<T>
     Logger logger = Logger.getLogger(this.getClass());
     private IUserLoginDao<T> userDao;
 
-    public void logoutCommon(HttpSession session) {
+    /**
+     * @param request : 用于记录日志时获取请求信息,比如ip,请求参数等
+     * @param session
+     */
+    public void logoutCommon(HttpServletRequest request, HttpSession session) {
         AuthenticateUtil.logout(session);
-        afterLogout(session);
+        afterLogout(request, session);
     }
 
-    public void afterLogout(HttpSession session) {
+    /**
+     * 子类可以覆写,用于清理自定义的session key
+     * @param request : 用于记录日志时获取请求信息,比如ip,请求参数等
+     * @param session
+     */
+    public void afterLogout(HttpServletRequest request, HttpSession session) {
 
     }
     public LoginResultBean loginCommon(Model model, GenericUser user, HttpServletRequest request, HttpServletResponse response
@@ -101,8 +110,8 @@ public class UserBaseController<T extends GenericUser> extends BaseController<T>
      * @return
      */
     @RequestMapping(value = "/logout")
-    public String logout(HttpSession session, String targetView) {
-        logoutCommon(session);
+    public String logout(HttpServletRequest request, HttpSession session, String targetView) {
+        logoutCommon(request, session);
         if (!ValueWidget.isNullOrEmpty(targetView)) {
             return targetView;
         }
