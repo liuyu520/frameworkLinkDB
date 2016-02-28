@@ -29,8 +29,8 @@ public class UserBaseController<T extends GenericUser> extends BaseController<T>
      * @param session
      */
     public void logoutCommon(HttpServletRequest request, HttpSession session) {
-        AuthenticateUtil.logout(session);
-        afterLogout(request, session);
+        GenericUser user = AuthenticateUtil.logout(session);
+        afterLogout(request, session, user);//user 用于注销时日志记录userId
     }
 
     /**
@@ -38,7 +38,7 @@ public class UserBaseController<T extends GenericUser> extends BaseController<T>
      * @param request : 用于记录日志时获取请求信息,比如ip,请求参数等
      * @param session
      */
-    public void afterLogout(HttpServletRequest request, HttpSession session) {
+    public void afterLogout(HttpServletRequest request, HttpSession session, GenericUser user) {
 
     }
     public LoginResultBean loginCommon(Model model, GenericUser user, HttpServletRequest request, HttpServletResponse response
