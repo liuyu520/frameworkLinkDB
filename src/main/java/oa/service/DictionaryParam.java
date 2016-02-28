@@ -155,12 +155,15 @@ public class DictionaryParam {
             return null;
         }
         try {
-            for (CommonDictionary dictionary : dictionaryMap.get(groupId)) {
-                if (dictionary.getKey2().equalsIgnoreCase(key)) {
-                    value = dictionary.getValue();
-                    break;
+        	List<CommonDictionary>  dicts=dictionaryMap.get(groupId);
+        	if(!ValueWidget.isNullOrEmpty(dicts)){
+        		for (CommonDictionary dictionary : dicts) {
+                    if (dictionary.getKey2().equalsIgnoreCase(key)) {
+                        value = dictionary.getValue();
+                        break;
+                    }
                 }
-            }
+        	}
         } catch (Exception e) {
 //            if (logger.isErrorEnabled()) {
 //                logger.error("get Data Error.", e);
