@@ -31,6 +31,7 @@ public class UserBaseController<T extends GenericUser> extends BaseController<T>
     public void logoutCommon(HttpServletRequest request, HttpSession session) {
         GenericUser user = AuthenticateUtil.logout(session);
         afterLogout(request, session, user);//user 用于注销时日志记录userId
+        session.getServletContext().setAttribute(session.getId(), null);
     }
 
     /**
