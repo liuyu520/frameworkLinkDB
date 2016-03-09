@@ -268,7 +268,7 @@ public class UploadController extends BaseController {
             if (!relativePath.endsWith("/")) {
                 relativePath = relativePath + "/";
             }
-            relativePath = relativePath + uploadResult.getFinalFileName();//upload/image/20150329170823_2122015-03-23_01-42-03.jpg
+//            relativePath = relativePath + uploadResult.getFinalFileName();//upload/image/20150329170823_2122015-03-23_01-42-03.jpg
             String url2 = rootPath + relativePath;
 
             String fullUrl = null;//http://localhost:8080/tv_mobile/upload/image/20150329170823_2122015-03-23_01-42-03.jpg
@@ -522,11 +522,11 @@ public class UploadController extends BaseController {
             HttpServletRequest request, HttpServletResponse response,
             String id_argument) throws FileUploadException {
         System.out.println(file);// org.springframework.web.multipart.commons.CommonsMultipartFile@5895fca6
-
-        System.out.println(file.getSize());// 若没有上传文件,则为0
         if (file == null || file.getSize() == 0) {
             return getJavascript(Constant2.ERROR_UPLOAD_FILE_NO_SELECTED_FILE);
         }
+        System.out.println(file.getSize());// 若没有上传文件,则为0
+        
         System.out.println(file.getOriginalFilename());// 若没有上传文件,则为空字符串
 //		response.setCharacterEncoding("UTF-8");
         UploadResult uploadResult2 = beforeUpload(request, false);

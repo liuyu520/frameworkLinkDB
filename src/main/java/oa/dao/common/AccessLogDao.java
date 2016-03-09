@@ -133,6 +133,9 @@ public class AccessLogDao extends GenericDao<AccessLog> {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        if(null==now){
+        	return criteria;
+        }
         return criteria.add(Restrictions.between(COLUMN_TIME,
                 TimeHWUtil.getSecondBefore(now, beforeDay),
                 now.getTime() / 1000));
