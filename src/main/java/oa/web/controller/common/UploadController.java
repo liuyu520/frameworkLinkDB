@@ -13,6 +13,7 @@ import oa.dao.common.CompressFailedPicDao;
 import oa.entity.common.AccessLog;
 import oa.entity.common.CompressFailedPic;
 import oa.service.DictionaryParam;
+import oa.util.HWUtils;
 import oa.web.controller.base.BaseController;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
@@ -140,28 +141,14 @@ public class UploadController extends BaseController {
             // }
             // }
             ObjectMapper mapper = new ObjectMapper();
-
-            String rootPath = request.getContextPath();
-            if (!rootPath.endsWith("/")) {
-                rootPath = rootPath + "/";
-            }
-            if (!relativePath.endsWith("/")) {
-                relativePath = relativePath + "/";
-            }
-            relativePath = relativePath + finalFileName;//upload/image/20150329170823_2122015-03-23_01-42-03.jpg
-            String url2 = rootPath + relativePath;
-
+            String url2 = HWUtils.getRelativeUrl(request, relativePath, finalFileName);
             String fullUrl = null;//http://localhost:8080/tv_mobile/upload/image/20150329170823_2122015-03-23_01-42-03.jpg
             /***
              * request.getRequestURL():http://localhost:8081/SSLServer/addUser.security<br>
              * request.getServletPath():/addUser.security<br>
              * prefixPath:http://localhost:8080/tv_mobile/
              */
-            String prefixPath = request.getRequestURL().toString().replaceAll(request.getServletPath(), "");
-            if (!prefixPath.endsWith("/")) {
-                prefixPath = prefixPath + "/";
-            }
-            fullUrl = prefixPath + relativePath;
+            fullUrl = HWUtils.getFullUrl(request, relativePath, finalFileName);
             if (!ValueWidget.isNullOrEmpty(needMD5) && needMD5.equalsIgnoreCase("need")) {
                 String md5 = SystemHWUtil.getFileMD5(savedFile);
                 map.put("md5", md5);
@@ -194,6 +181,7 @@ public class UploadController extends BaseController {
         return content;
 
     }
+
 
     /***
      * {"fileName":"20141002125209_571slide4.jpg","path":"D:\\software\\eclipse\\workspace2\\demo_channel_terminal\\upload\\image\\20141002125209_571slide4.jpg"}<br>
@@ -241,21 +229,9 @@ public class UploadController extends BaseController {
                 }
                 return errorMessage;
             }
-            fileName = fileName.replaceAll("[\\s]+", SystemHWUtil.EMPTY);//IE中识别不了有空格的json
-            // 保存到哪儿
-            String finalFileName = TimeHWUtil.formatDateByPattern(TimeHWUtil
-                    .getCurrentTimestamp(), "yyyyMMddHHmmss") + "_"
-                    + new Random().nextInt(1000) + fileName;
-            String relativePath = null;
-            if (ValueWidget.isNullOrEmpty(uploadFolder)) {
-                relativePath = Constant2.UPLOAD_FOLDER_NAME + "/image";
-            } else {
-                relativePath = uploadFolder;
-            }
 
-            File savedFile = WebServletUtil.getUploadedFilePath(request, relativePath
-                    , finalFileName,
-                    Constant2.SRC_MAIN_WEBAPP);// "D:\\software\\eclipse\\workspace2\\demo_channel_terminal\\ upload\\pic\\ys4-1.jpg"
+            UploadResult uploadResult = HWUtils.getSavedToFile(request, fileName, uploadFolder);
+            File savedFile = uploadResult.getSavedFile();
             File parentFolder = SystemHWUtil.createParentFolder(savedFile);
             FileUtils.makeWritable(parentFolder);//使...可写
             System.out.println("[upload]savedFile:"
@@ -288,10 +264,11 @@ public class UploadController extends BaseController {
             if (!rootPath.endsWith("/")) {
                 rootPath = rootPath + "/";
             }
+            String relativePath = uploadResult.getRelativePath();
             if (!relativePath.endsWith("/")) {
                 relativePath = relativePath + "/";
             }
-            relativePath = relativePath + finalFileName;//upload/image/20150329170823_2122015-03-23_01-42-03.jpg
+            relativePath = relativePath + uploadResult.getFinalFileName();//upload/image/20150329170823_2122015-03-23_01-42-03.jpg
             String url2 = rootPath + relativePath;
 
             String fullUrl = null;//http://localhost:8080/tv_mobile/upload/image/20150329170823_2122015-03-23_01-42-03.jpg
@@ -300,22 +277,18 @@ public class UploadController extends BaseController {
              * request.getServletPath():/addUser.security<br>
              * prefixPath:http://localhost:8080/tv_mobile/
              */
-            String prefixPath = request.getRequestURL().toString().replaceAll(request.getServletPath(), "");
-            if (!prefixPath.endsWith("/")) {
-                prefixPath = prefixPath + "/";
-            }
-            fullUrl = prefixPath + relativePath;
+            fullUrl = HWUtils.getFullUrl(request, relativePath, uploadResult.getFinalFileName());
             if (!ValueWidget.isNullOrEmpty(needMD5) && needMD5.equalsIgnoreCase("need")) {
                 String md5 = SystemHWUtil.getFileMD5(savedFile);
                 map.put("md5", md5);
                 map.put("MD5", md5);
             }
-            map.put("fileName", finalFileName);
+            map.put("fileName", uploadResult.getFinalFileName());
             map.put("remoteAbsolutePath", savedFile.getAbsolutePath());
             map.put("url", url2);
             map.put("fullUrl", fullUrl);
             map.put("relativePath", relativePath);
-            session.setAttribute("finalFileName", finalFileName);
+            session.setAttribute("finalFileName", uploadResult.getFinalFileName());
             try {
                 content = mapper.writeValueAsString(map);
                 System.out.println(content);

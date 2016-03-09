@@ -53,7 +53,7 @@ public abstract class UploadGenericController extends BaseController {
 
             UploadCallback uploadCallback = getUploadCallback();
             try {
-                return uploadCallback.callback(file, response);
+                return uploadCallback.callback(file, request, response);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
