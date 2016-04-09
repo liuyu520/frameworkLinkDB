@@ -3,8 +3,12 @@ package oa.web.controller.common;
 import com.common.dao.interf.IUserLoginDao;
 import com.common.dict.Constant2;
 import com.common.entity.user.interf.GenericUser;
+import com.common.util.SystemHWUtil;
 import com.common.util.WebServletUtil;
+import com.io.hw.json.HWJacksonUtils;
 import com.string.widget.util.ValueWidget;
+import com.string.widget.util.XSSUtil;
+
 import oa.bean.LoginResultBean;
 import oa.service.DictionaryParam;
 import oa.util.AuthenticateUtil;
@@ -12,11 +16,14 @@ import oa.web.controller.base.BaseController;
 import org.apache.log4j.Logger;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,6 +53,7 @@ public class UserBaseController<T extends GenericUser> extends BaseController<T>
             , HttpSession session, String issaveUserName, String issavePasswd) {
         LoginResultBean loginResultBean = new LoginResultBean();
         loginResultBean.setFailed(true);
+        int login_result = 0;
         if (ValueWidget.isNullOrEmpty(user) || ValueWidget.isNullOrEmpty(user.getUsername())) {
             loginResultBean.setMessage("请输入用户名.");
             return loginResultBean;
@@ -61,7 +69,9 @@ public class UserBaseController<T extends GenericUser> extends BaseController<T>
             loginResultBean.setMessage("请输入密码.");
             return loginResultBean;
         }
+        passwordInput = XSSUtil.cleanXSS(passwordInput);
         String username2 = user.getUsername();
+        username2 = XSSUtil.cleanXSS(username2);
         GenericUser user1 = null;
         try {
             user1 = userDao.getByName(username2);
@@ -104,12 +114,12 @@ public class UserBaseController<T extends GenericUser> extends BaseController<T>
         return loginResultBean;
     }
 
-    /***
-     * 注销
-     *
-     * @param session
-     * @return
-     */
+        /***
+         * 注销
+         *
+         * @param session
+         * @return
+         */
     @RequestMapping(value = "/logout")
     public String logout(HttpServletRequest request, HttpSession session, String targetView) {
         logoutCommon(request, session);
