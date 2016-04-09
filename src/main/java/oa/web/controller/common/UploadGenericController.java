@@ -5,6 +5,7 @@ import com.string.widget.util.ValueWidget;
 import oa.entity.common.AccessLog;
 import oa.web.controller.base.BaseController;
 import oa.web.upload.UploadCallback;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,9 +26,9 @@ import java.util.Map;
  */
 public abstract class UploadGenericController extends BaseController {
     @RequestMapping(value = "/upload", produces = SystemHWUtil.RESPONSE_CONTENTTYPE_JSON_UTF)
-    public String upload(
-            @RequestParam(value = "image223", required = false) MultipartFile file, String uploadFolder, String needMD5,
-            HttpServletRequest request, HttpServletResponse response, HttpSession session)
+    public String upload(Model model,
+                         @RequestParam(value = "image223", required = false) MultipartFile file, String uploadFolder, String needMD5,
+                         HttpServletRequest request, HttpServletResponse response, HttpSession session)
             throws IOException {
         String content = null;
         Map map = new HashMap();
@@ -53,7 +54,7 @@ public abstract class UploadGenericController extends BaseController {
 
             UploadCallback uploadCallback = getUploadCallback();
             try {
-                return uploadCallback.callback(file, request, response);
+                return uploadCallback.callback(model, file, request, response);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
