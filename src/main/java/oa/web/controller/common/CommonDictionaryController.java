@@ -6,6 +6,7 @@ import com.common.util.SystemHWUtil;
 import com.common.util.WebServletUtil;
 import com.io.hw.json.HWJacksonUtils;
 import com.string.widget.util.ValueWidget;
+import com.string.widget.util.XSSUtil;
 import oa.entity.common.AccessLog;
 import oa.entity.common.CommonDictionary;
 import oa.service.DictionaryParam;
@@ -41,6 +42,7 @@ public class CommonDictionaryController extends BaseController<CommonDictionary>
             map = new HashMap<String, String>();//空map,比直接空字符串要好些,便于前端判断
             //返回的结果:{}
         } else {
+            groupId = XSSUtil.cleanXSS(groupId);
             map = DictionaryParam.getIdValue(groupId);
             //返回:{"3":"足球","2":"体育","1":"娱乐","7":"篮球2","6":"篮球","5":"NBA22","4":"NBA","9":"篮球231","8":"篮球23"}
         }
