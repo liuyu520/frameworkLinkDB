@@ -26,9 +26,9 @@ import java.util.Map;
  */
 public abstract class UploadGenericController extends BaseController {
     @RequestMapping(value = "/upload", produces = SystemHWUtil.RESPONSE_CONTENTTYPE_JSON_UTF)
-    public String upload(Model model,
-                         @RequestParam(value = "image223", required = false) MultipartFile file, String uploadFolder, String needMD5,
-                         HttpServletRequest request, HttpServletResponse response, HttpSession session)
+    public String upload(
+            @RequestParam(value = "image223", required = false) MultipartFile file, String uploadFolder, String needMD5,
+            HttpServletRequest request, HttpServletResponse response, HttpSession session, Model model)
             throws IOException {
         String content = null;
         Map map = new HashMap();
