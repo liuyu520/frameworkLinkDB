@@ -3,12 +3,9 @@ package oa.web.controller.common;
 import com.common.dao.interf.IUserLoginDao;
 import com.common.dict.Constant2;
 import com.common.entity.user.interf.GenericUser;
-import com.common.util.SystemHWUtil;
 import com.common.util.WebServletUtil;
-import com.io.hw.json.HWJacksonUtils;
 import com.string.widget.util.ValueWidget;
 import com.string.widget.util.XSSUtil;
-
 import oa.bean.LoginResultBean;
 import oa.service.DictionaryParam;
 import oa.util.AuthenticateUtil;
@@ -16,14 +13,12 @@ import oa.web.controller.base.BaseController;
 import org.apache.log4j.Logger;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -91,6 +86,12 @@ public class UserBaseController<T extends GenericUser> extends BaseController<T>
         loginResultBean.setFailed(false);
         session.setAttribute(Constant2.SESSION_KEY_LOGINED_USER, user1);//登录成功的标识有两个:"user",Constant2.SESSION_KEY_LOGINED_FLAG
         session.setAttribute(Constant2.SESSION_KEY_LOGINED_FLAG, Constant2.FLAG_LOGIN_SUCCESS);//登录成功的标识有两个:"user",Constant2.SESSION_KEY_LOGINED_FLAG
+        try {
+            WebServletUtil.setSessionIdCookie(request, response);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            logger.error("save JSESSIONID to cookie failed", e);
+        }
         model.addAttribute("user", user1);
         boolean isSaveUserName = !ValueWidget.isNullOrEmpty(issaveUserName)
                 && issaveUserName.equalsIgnoreCase("save");
