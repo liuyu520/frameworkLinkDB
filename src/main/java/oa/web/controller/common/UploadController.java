@@ -141,14 +141,14 @@ public class UploadController extends BaseController {
             // }
             // }
             ObjectMapper mapper = new ObjectMapper();
-            String url2 = HWUtils.getRelativeUrl(request, relativePath, finalFileName);
+            String url2 = WebServletUtil.getRelativeUrl(request, relativePath, finalFileName);
             String fullUrl = null;//http://localhost:8080/tv_mobile/upload/image/20150329170823_2122015-03-23_01-42-03.jpg
             /***
              * request.getRequestURL():http://localhost:8081/SSLServer/addUser.security<br>
              * request.getServletPath():/addUser.security<br>
              * prefixPath:http://localhost:8080/tv_mobile/
              */
-            fullUrl = HWUtils.getFullUrl(request, relativePath, finalFileName);
+            fullUrl = WebServletUtil.getFullUrl(request, relativePath, finalFileName);
             if (!ValueWidget.isNullOrEmpty(needMD5) && needMD5.equalsIgnoreCase("need")) {
                 String md5 = SystemHWUtil.getFileMD5(savedFile);
                 map.put("md5", md5);
@@ -277,7 +277,7 @@ public class UploadController extends BaseController {
              * request.getServletPath():/addUser.security<br>
              * prefixPath:http://localhost:8080/tv_mobile/
              */
-            fullUrl = HWUtils.getFullUrl(request, relativePath, uploadResult.getFinalFileName());
+            fullUrl = WebServletUtil.getFullUrl(request, relativePath, uploadResult.getFinalFileName());
             if (!ValueWidget.isNullOrEmpty(needMD5) && needMD5.equalsIgnoreCase("need")) {
                 String md5 = SystemHWUtil.getFileMD5(savedFile);
                 map.put("md5", md5);
@@ -838,20 +838,17 @@ public class UploadController extends BaseController {
     }
 
     @Override
-    protected void beforeAddInput(Model model) {
-        // TODO Auto-generated method stub
+    protected void beforeAddInput(Model model, HttpServletRequest request) {
 
     }
 
     @Override
     protected void errorDeal(Model model) {
-        // TODO Auto-generated method stub
 
     }
 
     @Override
     public String getJspFolder() {
-        // TODO Auto-generated method stub
         return null;
     }
 

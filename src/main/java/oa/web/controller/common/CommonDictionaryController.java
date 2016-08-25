@@ -12,6 +12,7 @@ import oa.entity.common.CommonDictionary;
 import oa.service.DictionaryParam;
 import oa.view.CommonDictionaryView;
 import oa.web.controller.base.BaseController;
+import org.apache.commons.collections.map.ListOrderedMap;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -72,7 +73,7 @@ public class CommonDictionaryController extends BaseController<CommonDictionary>
 
 
     @Override
-    protected void beforeAddInput(Model model) {
+    protected void beforeAddInput(Model model, HttpServletRequest request) {
 
     }
 
@@ -86,4 +87,11 @@ public class CommonDictionaryController extends BaseController<CommonDictionary>
         return label;
     }
 
+    @Override
+    public ListOrderedMap getListOrderBy() {
+//		orderColumnModeMap.put("releaseTime", "desc");
+        ListOrderedMap orderColumnModeMap = new ListOrderedMap();
+        orderColumnModeMap.put("id", "desc");
+        return orderColumnModeMap;
+    }
 }

@@ -165,7 +165,7 @@ public class UserBaseController<T extends GenericUser> extends BaseController<T>
     }
 
     @Override
-    protected void beforeAddInput(Model model) {
+    protected void beforeAddInput(Model model, HttpServletRequest request) {
 
     }
 
