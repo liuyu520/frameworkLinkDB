@@ -70,6 +70,11 @@ public abstract class UploadGenericController extends BaseController {
     }
 
     private String filterFileSize(@RequestParam(value = "image223", required = false) MultipartFile file, HttpServletRequest request, AccessLog accessLog, String errorPrefix) {
+        String errorMessage = zeroSizeOfUploadedFile(file, request, accessLog, errorPrefix);
+        return errorMessage;
+    }
+
+    public String zeroSizeOfUploadedFile(@RequestParam(value = "image223", required = false) MultipartFile file, HttpServletRequest request, AccessLog accessLog, String errorPrefix) {
         if (file.getSize() == 0) {
             String errorMessage = errorPrefix + "file size is zero";
             if (!ValueWidget.isNullOrEmpty(accessLog)) {

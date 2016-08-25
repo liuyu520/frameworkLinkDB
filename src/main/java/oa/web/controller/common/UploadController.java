@@ -14,7 +14,7 @@ import oa.entity.common.AccessLog;
 import oa.entity.common.CompressFailedPic;
 import oa.service.DictionaryParam;
 import oa.util.HWUtils;
-import oa.web.controller.base.BaseController;
+import oa.web.upload.UploadCallback;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadException;
@@ -45,7 +45,7 @@ import java.util.*;
 @Controller
 //@Scope(value = "prototype")
 @RequestMapping("/upload")
-public class UploadController extends BaseController {
+public class UploadController extends UploadGenericController {
     public static final int UPLOAD_RESULT_SUCCESS = 0;
     public static final int UPLOAD_RESULT_FAILED = 1;
     private static HashMap<String, String> extMap;
@@ -221,14 +221,8 @@ public class UploadController extends BaseController {
             AccessLog accessLog = logUploadFile(request);//记录日志
             String errorPrefix = "upload failed,error:";
             String fileName = file.getOriginalFilename();// 上传的文件名
-            if (file.getSize() == 0) {
-                String errorMessage = errorPrefix + "file size is zero";
-                if (!ValueWidget.isNullOrEmpty(accessLog)) {
-                    accessLog.setOperateResult(errorMessage);
-                    logSave(accessLog, request);
-                }
-                return errorMessage;
-            }
+            String errorMessage = zeroSizeOfUploadedFile(file, request, accessLog, errorPrefix);
+            if (errorMessage != null) return errorMessage;
 
             UploadResult uploadResult = HWUtils.getSavedToFile(request, fileName, uploadFolder);
             File savedFile = uploadResult.getSavedFile();
@@ -849,6 +843,11 @@ public class UploadController extends BaseController {
 
     @Override
     public String getJspFolder() {
+        return null;
+    }
+
+    @Override
+    public UploadCallback getUploadCallback() {
         return null;
     }
 
