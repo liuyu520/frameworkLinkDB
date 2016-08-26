@@ -191,7 +191,7 @@ public class UploadController extends UploadGenericController {
      * "fileName": "20150329165958_7952015-03-18_22-42-56.jpg",
      * "url": "/tv_mobile/upload/image/20150329165958_7952015-03-18_22-42-56.jpg"
      * }
-     *
+     * <br >因为类UploadGenericController 中已经有@RequestMapping(value = "/upload"),所以改为/upload2
      * @param file
      * @param request
      * @param response
@@ -199,7 +199,7 @@ public class UploadController extends UploadGenericController {
      * @throws IOException
      */
     @ResponseBody
-    @RequestMapping(value = "/upload", produces = SystemHWUtil.RESPONSE_CONTENTTYPE_JSON_UTF)
+    @RequestMapping(value = "/upload2", produces = SystemHWUtil.RESPONSE_CONTENTTYPE_JSON_UTF)
     public String upload(
             @RequestParam(value = "image223", required = false) MultipartFile file, String uploadFolder, String needMD5,
             HttpServletRequest request, HttpServletResponse response, HttpSession session)
