@@ -137,8 +137,11 @@ public abstract class BaseController<T> extends GenericController<T> {
         return LogUtil.logByMethod(request, Constant2.LOGS_ACCESS_TYPE_LOGOUT, getJspFolder());
     }
 
+    protected void logSave(AccessLog accessLog, HttpServletRequest request, boolean realSave) {
+        LogUtil.logSave(accessLog, request, getAccessLogDao(), realSave);
+    }
     protected void logSave(AccessLog accessLog, HttpServletRequest request) {
-        LogUtil.logSave(accessLog, request, getAccessLogDao());
+        LogUtil.logSave(accessLog, request, getAccessLogDao(), true);
     }
 
     public AccessLogDao getAccessLogDao() {
